@@ -1,0 +1,4 @@
+*.zip
+*.asv
+
+__pycache__/
