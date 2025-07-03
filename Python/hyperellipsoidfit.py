@@ -85,6 +85,10 @@ class Persistent:
 #
 #   Copyright 2014-2025 by Martti Kesäniemi
 #
+
+
+########################################################
+# Entry point for the ellipsoid fitting routine
 def hyperellipsoidfit(data,
     regularization = np.finfo(float).eps, 
     method = "SOD", 
@@ -200,6 +204,7 @@ def hyperellipsoidfit(data,
     return Me, oe, success, A, regParam, dist
 
 ########################################################
+# Data normalization to improve the numerical stability
 def NormalizeData(data, bMeans = True, bScale = True):
 
     if bMeans:
@@ -220,6 +225,7 @@ def NormalizeData(data, bMeans = True, bScale = True):
     return sdata, means, scales
 
 ########################################################
+# Solves the fitting problem using a quadratic constraint matrix
 def QuadraticConstraint(
     ndata, p,
     regularization,
@@ -249,7 +255,6 @@ def QuadraticConstraint(
             alpha =     4
             beta  =     0
             gamma =    -1
-
         case _:
             raise Exception('Unknown method');
     
@@ -307,6 +312,7 @@ def QuadraticConstraint(
     return A, success
 
 ########################################################
+# Select the eigenvector providing a valid solution
 def ChoosePositiveEigenvalue(e_vec, e_val, p):
 
     success = False 
@@ -351,6 +357,7 @@ def ChoosePositiveEigenvalue(e_vec, e_val, p):
 
 
 ########################################################
+# Computed the discriminants corresponding to a solution vector
 def GetDiscriminants( v, p ):
 
     if p.forceAxial: #All cross terms are zero, but discrs must still be > 0
@@ -367,6 +374,10 @@ def GetDiscriminants( v, p ):
 
 
 ########################################################
+# Transforms parametric representation of the ellipsoid to form
+# M*v + o, where
+# M is a matrix mapping a origo-centered unit sphere to the ellipsoid, and 
+# o is the center point of the ellipsoid
 def GetMappingForm( v, p ):
 
     # Scale v
